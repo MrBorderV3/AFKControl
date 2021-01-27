@@ -5,6 +5,7 @@ import me.border.afkcontrol.listeners.PlayerAFKHandler;
 import me.border.afkcontrol.listeners.PlayerOverloadHandler;
 import me.border.afkcontrol.util.TPSCounter;
 import me.border.spigotutilities.baseutils.Utils;
+import me.border.spigotutilities.plugin.Setting;
 import me.border.spigotutilities.plugin.SpigotPlugin;
 
 public class AFKControl extends SpigotPlugin {
@@ -28,6 +29,7 @@ public class AFKControl extends SpigotPlugin {
     @Override
     protected void load() {
         tpsCounter = TPSCounter.create();
+        getSettings().add(Setting.DISABLE_ENTITY_REFERENCE);
     }
 ;
     @Override

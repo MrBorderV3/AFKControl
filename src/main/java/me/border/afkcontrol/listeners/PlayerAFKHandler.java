@@ -15,9 +15,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerAFKHandler implements Listener {
@@ -33,19 +31,27 @@ public class PlayerAFKHandler implements Listener {
                 .runnable(new BukkitRunnable() {
                     @Override
                     public void run() {
+                        Set<UUID> remove = new HashSet<>();
                         for (Map.Entry<UUID, Long> entry : lastMove.entrySet()){
                             double minsAFK = toMinutes(entry.getValue());
                             Player player = Bukkit.getPlayer(entry.getKey());
                             if (player == null) {
-                                lastMove.remove(entry.getKey());
+                                remove.add(entry.getKey());
                                 continue;
                             }
+                            if (AFKManager.isAFK(player))
+                                continue;
 
-                            PermissionGroup pg = PermissionGroup.getPermissionGroup(player);
+
+                                PermissionGroup pg = PermissionGroup.getPermissionGroup(player);
                             if (minsAFK >= pg.getAFKTime()){
                                 AFKManager.addAFK(player, true);
                                 PermissionGroup.removeFromCache(player);
                             }
+                        }
+
+                        for (UUID uuid : remove){
+                            lastMove.remove(uuid);
                         }
                     }
                 })
