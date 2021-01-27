@@ -1,0 +1,33 @@
+notAPlayer: "&cOnly players may use this command!"
+noPermission: "&cYou do not have permission to use this command!"
+illegalArguments: "&cIllegal Arguments! Please try again with the correct arguments!"
+
+AFKCommand:
+  AFKDisabled: "&6You are not AFK anymore!"
+  AFKEnabled: "&6You are now AFK!"
+
+AFKBroadcast:
+  enabled: true
+  AFKDisabled: "&b%player% &6Is not AFK anymore!"
+  AFKEnabled: "&b%player% &6Is now AFK!"
+
+AutoKick:
+  enabled: true
+  KickMessage: "You have been kicked for being AFK too long"
+
+TPSKick:
+  enabled: true
+  TPS: 16 #IF THE TPS IS UNDER THIS THE AUTOMATIC TPS KICK WILL START
+  KickMessage: "You have been kicked for being AFK"
+  Time:
+
+PlayerOverload:
+  enabled: true
+  Amount: 15 #If the amount of players online is above this the automatic AFK kick will start
+  KickMessage: "You have been kicked for being AFK"
+
+PermissionGroups: #permission for a group will always be: afkcontrol.group.(groupname)
+  default: # DO NOT REMOVE THIS GROUP
+    priority: 1
+    kickTime: 30 # IN MINUTES
+    afkTime: 5

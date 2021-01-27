@@ -1,0 +1,5 @@
+name: AFKControl
+version: ${project.version}
+main: me.border.afkcontrol.AFKControl
+api-version: 1.16
+authors: [ MrBorder ]
