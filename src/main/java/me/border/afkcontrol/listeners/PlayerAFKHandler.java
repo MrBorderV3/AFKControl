@@ -4,6 +4,7 @@ import me.border.afkcontrol.AFKManager;
 import me.border.afkcontrol.PermissionGroup;
 import me.border.spigotutilities.task.TaskBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -74,9 +75,13 @@ public class PlayerAFKHandler implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e){
         Player p = e.getPlayer();
-        add(p);
-        if (AFKManager.isAFK(p)){
-            AFKManager.removeAFK(p, true);
+        Location from = e.getFrom();
+        Location to = e.getTo();
+        if (from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ()) {
+            add(p);
+            if (AFKManager.isAFK(p)) {
+                AFKManager.removeAFK(p, true);
+            }
         }
     }
 

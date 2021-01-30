@@ -23,7 +23,7 @@ public class PlayerOverloadHandler implements Listener {
                     return false;
 
                 return Bukkit.getOnlinePlayers().size() >= overloadMax;
-            });
+            }, "PlayerOverload");
         }
     }
 }

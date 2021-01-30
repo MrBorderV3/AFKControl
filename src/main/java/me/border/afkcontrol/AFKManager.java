@@ -61,7 +61,7 @@ public class AFKManager {
 
                         double tps = TPSCounter.getInstance().getTPS();
                         if (tps < Utils.ci("TPSKick.TPS")){
-                            kickWorstPio();
+                            kickWorstPio("TPSKick");
                         }
                     }
                 })
@@ -69,7 +69,7 @@ public class AFKManager {
 
     }
 
-    public static void kickWorstPioWhile(Callable<Boolean> forCase){
+    public static void kickWorstPioWhile(Callable<Boolean> forCase, String reason){
         List<Integer> pios = new LinkedList<>(pioAfkMap.keySet());
         Collections.sort(pios);
 
@@ -84,30 +84,36 @@ public class AFKManager {
                         e.printStackTrace();
                         return;
                     }
-                    kickFirst(players, i);
+                    kickFirst(reason, players, i);
                 }
             }
         }
     }
 
-    public static void kickWorstPio() {
+    public static void kickWorstPio(String reason) {
         List<Integer> pios = new LinkedList<>(pioAfkMap.keySet());
         Collections.sort(pios);
 
         for (int i : pios) {
             if (pioAfkMap.containsKey(i)) {
                 LinkedList<AFKPlayer> players = pioAfkMap.get(i);
-                kickFirst(players, i);
+                kickFirst(reason, players, i);
                 return;
             }
         }
     }
 
-    private static void kickFirst(LinkedList<AFKPlayer> players, int key) {
-        AFKPlayer pickedPlayer = players.removeFirst();
+    private static void kickFirst(String reason, LinkedList<AFKPlayer> players, int key) {
         if (players.isEmpty()){
             pioAfkMap.remove(key);
+           kickWorstPio(reason);
+           return;
         }
+        AFKPlayer pickedPlayer = players.removeFirst();
+        if (players.isEmpty()) {
+            pioAfkMap.remove(key);
+        }
+
 
         Bukkit.getScheduler().runTask(AFKControl.getInstance(), () -> {
             Player player = Bukkit.getPlayer(pickedPlayer.getUUID());
@@ -116,7 +122,7 @@ public class AFKManager {
                 return;
             }
 
-            player.kickPlayer(Utils.ucs("AutoKick.KickMessage"));
+            player.kickPlayer(Utils.ucs(reason + ".KickMessage"));
         });
     }
 
