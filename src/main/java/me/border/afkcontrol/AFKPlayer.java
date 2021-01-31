@@ -1,6 +1,7 @@
 package me.border.afkcontrol;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
@@ -11,9 +12,11 @@ public class AFKPlayer {
     private final UUID uuid;
     private final long stamp;
     private final PermissionGroup permissionGroup;
+    private final Location location;
 
     public AFKPlayer(Player player){
         this.uuid = player.getUniqueId();
+        this.location = player.getLocation();
         this.stamp = System.currentTimeMillis();
         this.permissionGroup = getPermissionGroup();
     }
@@ -24,6 +27,10 @@ public class AFKPlayer {
 
     public long getStamp() {
         return stamp;
+    }
+
+    public Location getLocation(){
+        return location;
     }
 
     public PermissionGroup getPermissionGroup(){

@@ -104,10 +104,10 @@ public class AFKManager {
     }
 
     private static void kickFirst(String reason, LinkedList<AFKPlayer> players, int key) {
-        if (players.isEmpty()){
+        if (players.isEmpty()) {
             pioAfkMap.remove(key);
-           kickWorstPio(reason);
-           return;
+            kickWorstPio(reason);
+            return;
         }
         AFKPlayer pickedPlayer = players.removeFirst();
         if (players.isEmpty()) {
@@ -152,7 +152,11 @@ public class AFKManager {
     public static void removeAFK(Player player, boolean afk){
         AFKPlayer afkPlayer = afkPlayers.remove(player.getUniqueId());
         int pio = afkPlayer.getPermissionGroup().getPriority();
-        pioAfkMap.get(pio).remove(afkPlayer);
+        try {
+            pioAfkMap.get(pio).remove(afkPlayer);
+        } catch (NullPointerException ignored){
+            // ignored
+        }
         if (afk) {
             if (Utils.cb("AFKBroadcast.enabled")){
                 ChatUtils.broadcastMessage("AFKBroadcast.AFKDisabled", "%player%", player.getName());

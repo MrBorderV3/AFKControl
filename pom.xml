@@ -7,7 +7,7 @@
     <name>AFKControl</name>
     <groupId>me.border</groupId>
     <artifactId>AFKControl</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
     <packaging>jar</packaging>
 
     <repositories>

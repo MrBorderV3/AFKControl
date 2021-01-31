@@ -26,6 +26,11 @@ PlayerOverload:
   Amount: 15 #If the amount of players online is above this the automatic AFK kick will start
   KickMessage: "You have been kicked for being AFK"
 
+AFKMove:
+  x: 1.0
+  y: 1.0
+  z: 1.0
+
 PermissionGroups: #permission for a group will always be: afkcontrol.group.(groupname)
   default: # DO NOT REMOVE THIS GROUP
     priority: 1

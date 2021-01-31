@@ -1,7 +1,9 @@
 package me.border.afkcontrol.listeners;
 
 import me.border.afkcontrol.AFKManager;
+import me.border.afkcontrol.AFKPlayer;
 import me.border.afkcontrol.PermissionGroup;
+import me.border.spigotutilities.baseutils.Utils;
 import me.border.spigotutilities.task.TaskBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,6 +25,9 @@ public class PlayerAFKHandler implements Listener {
 
     // UUID = player, Long = timestamp of last time they moved
     private final Map<UUID, Long> lastMove = new LinkedHashMap<>();
+    private final double xMove;
+    private final double yMove;
+    private final double zMove;
 
     public PlayerAFKHandler(){
         TaskBuilder.builder()
@@ -57,6 +62,10 @@ public class PlayerAFKHandler implements Listener {
                     }
                 })
                 .run();
+
+        xMove = Utils.cd("AFKMove.x");
+        yMove = Utils.cd("AFKMove.y");
+        zMove = Utils.cd("AFKMove.z");
     }
 
     @EventHandler
@@ -73,14 +82,26 @@ public class PlayerAFKHandler implements Listener {
     }
 
     @EventHandler
-    public void onMove(PlayerMoveEvent e){
+    public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
         Location from = e.getFrom();
         Location to = e.getTo();
-        if (from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ()) {
-            add(p);
-            if (AFKManager.isAFK(p)) {
+        double x = to.getX();
+        double y = to.getY();
+        double z = to.getZ();
+
+        if (AFKManager.isAFK(p)) {
+            AFKPlayer afkPlayer = AFKManager.getAFK(p.getUniqueId());
+            Location location = afkPlayer.getLocation();
+            if (x > location.getX() + xMove || x < location.getX() - xMove ||
+                    y > location.getY() + yMove || y < location.getY() - yMove ||
+                    z > location.getZ() + zMove || z < location.getZ() - zMove) {
+                add(p);
                 AFKManager.removeAFK(p, true);
+            }
+        } else {
+            if (from.getX() != x || from.getY() != y || from.getZ() != z){
+                add(p);
             }
         }
     }
