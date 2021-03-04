@@ -18,6 +18,11 @@ public class AFKCommand extends ICommand {
         if (!argsCheck(sender, 0, args)) return false;
 
         Player player = (Player) sender;
+        if (player.isOp()){
+            sendMsg(player, "AFKCommand.OP");
+            return true;
+        }
+
         if (AFKManager.isAFK(player)) {
             AFKManager.removeAFK(player, true);
             sendMsg(player, "AFKCommand.AFKDisabled");

@@ -1,5 +1,5 @@
 name: AFKControl
-version: 1.3
+version: 1.4
 main: me.border.afkcontrol.AFKControl
 api-version: 1.13
 author: MrBorder

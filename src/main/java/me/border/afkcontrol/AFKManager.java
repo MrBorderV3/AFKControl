@@ -54,14 +54,42 @@ public class AFKManager {
                 .after(30, TimeUnit.SECONDS)
                 .every(Utils.ci("TPSKick.Time"), TimeUnit.SECONDS)
                 .runnable(new BukkitRunnable() {
+                    private boolean secondCheck = false;
+
                     @Override
                     public void run() {
                         if (!Utils.cb("TPSKick.enabled"))
                             return;
 
+                        if (secondCheck)
+                            return;
                         double tps = TPSCounter.getInstance().getTPS();
-                        if (tps < Utils.ci("TPSKick.TPS")){
-                            kickWorstPio("TPSKick");
+                        double maxTPS = Utils.ci("TPSKick.TPS");
+                        if (tps < maxTPS){
+                            if (Utils.cb("TPSKick.SecondCheck")) {
+                                secondCheck = true;
+
+                                TaskBuilder.builder()
+                                        .async()
+                                        .after(Utils.ci("TPSKick.SecondCheckTime"), TimeUnit.SECONDS)
+                                        .runnable(new BukkitRunnable() {
+                                            @Override
+                                            public void run() {
+                                                if (TPSCounter.getInstance().getTPS() < maxTPS) {
+                                                    kickWorstPioWhile(() -> {
+                                                        boolean b = TPSCounter.getInstance().getTPS() < maxTPS;
+                                                        if (!b)
+                                                            secondCheck = false;
+                                                        return b;
+                                                    }, "TPSKick");
+                                                }
+                                            }
+                                        })
+                                        .run();
+
+                            } else {
+                                kickWorstPio("TPSKick");
+                            }
                         }
                     }
                 })

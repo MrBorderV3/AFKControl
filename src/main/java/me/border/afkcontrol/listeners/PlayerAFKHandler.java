@@ -70,20 +70,28 @@ public class PlayerAFKHandler implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e){
-        if (AFKManager.isAFK(e.getPlayer())){
-            AFKManager.removeAFK(e.getPlayer(), false);
+        Player p = e.getPlayer();
+        if (p.isOp())
+            return;
+        if (AFKManager.isAFK(p)){
+            AFKManager.removeAFK(p, false);
             remove(e.getPlayer());
         }
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e){
-        add(e.getPlayer());
+        Player p = e.getPlayer();
+        if (p.isOp())
+            return;
+        add(p);
     }
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
+        if (p.isOp())
+            return;
         Location from = e.getFrom();
         Location to = e.getTo();
         double x = to.getX();
@@ -111,12 +119,16 @@ public class PlayerAFKHandler implements Listener {
         if (e.getEntity() instanceof Player){
             if (e.getDamager() instanceof  Player){
                 Player p = (Player) e.getDamager();
+                if (p.isOp())
+                    return;
                 add(p);
                 if (AFKManager.isAFK(p)){
                     AFKManager.removeAFK(p, true);
                 }
             }
             Player p = (Player) e.getEntity();
+            if (p.isOp())
+                return;
             add(p);
             if (AFKManager.isAFK(p)){
                 AFKManager.removeAFK(p, true);
@@ -128,6 +140,8 @@ public class PlayerAFKHandler implements Listener {
     public void onInventoryClick(InventoryClickEvent e){
         if (e.getWhoClicked() instanceof Player){
             Player p = (Player) e.getWhoClicked();
+            if (p.isOp())
+                return;
             add(p);
             if (AFKManager.isAFK(p)){
                 AFKManager.removeAFK(p, true);
@@ -138,6 +152,8 @@ public class PlayerAFKHandler implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e){
         Player p = e.getPlayer();
+        if (p.isOp())
+            return;
         add(p);
         if (AFKManager.isAFK(p)){
             AFKManager.removeAFK(p, true);

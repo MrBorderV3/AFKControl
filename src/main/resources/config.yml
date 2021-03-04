@@ -5,6 +5,7 @@ illegalArguments: "&cIllegal Arguments! Please try again with the correct argume
 AFKCommand:
   AFKDisabled: "&6You are not AFK anymore!"
   AFKEnabled: "&6You are now AFK!"
+  OP: "&6Ops may not go AFK"
 
 AFKBroadcast:
   enabled: true
@@ -19,7 +20,9 @@ TPSKick:
   enabled: true
   TPS: 16 #IF THE TPS IS UNDER THIS THE AUTOMATIC TPS KICK WILL START
   KickMessage: "You have been kicked for being AFK"
-  Time:
+  Time: 120
+  SecondCheck: false
+  SecondCheckTime: 10
 
 PlayerOverload:
   enabled: true
